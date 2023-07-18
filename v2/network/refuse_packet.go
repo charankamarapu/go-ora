@@ -19,8 +19,8 @@ type RefusePacket struct {
 	message      string
 }
 
-func (pck *RefusePacket) bytes() []byte {
-	output := pck.packet.bytes()
+func (pck *RefusePacket) Bytes() []byte {
+	output := pck.packet.Bytes()
 	output[8] = pck.SystemReason
 	output[9] = pck.UserReason
 	data := []byte(pck.message)
@@ -29,7 +29,7 @@ func (pck *RefusePacket) bytes() []byte {
 	return output
 }
 
-func (pck *RefusePacket) getPacketType() PacketType {
+func (pck *RefusePacket) GetPacketType() PacketType {
 	return pck.packet.packetType
 }
 func newRefusePacketFromData(packetData []byte) *RefusePacket {

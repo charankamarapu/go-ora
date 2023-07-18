@@ -5,19 +5,19 @@ import (
 	"fmt"
 )
 
-//type AcceptPacket Packet
+// type AcceptPacket Packet
 type AcceptPacket struct {
 	packet     Packet
 	sessionCtx SessionContext
 	buffer     []byte
 }
 
-func (pck *AcceptPacket) bytes() []byte {
+func (pck *AcceptPacket) Bytes() []byte {
 	// ptkSize := 41
 	// if pck.sessionCtx.Version < 315 {
 	// 	ptkSize = 32
 	// }
-	output := pck.packet.bytes()
+	output := pck.packet.Bytes()
 	//output := make([]byte, pck.dataOffset)
 	//binary.BigEndian.PutUint16(output[0:], pck.packet.length)
 	//output[4] = uint8(pck.packet.packetType)
@@ -41,7 +41,7 @@ func (pck *AcceptPacket) bytes() []byte {
 	output = append(output, pck.buffer...)
 	return output
 }
-func (pck *AcceptPacket) getPacketType() PacketType {
+func (pck *AcceptPacket) GetPacketType() PacketType {
 	return pck.packet.packetType
 }
 
@@ -65,7 +65,7 @@ func (pck *AcceptPacket) getPacketType() PacketType {
 //	return &pck
 //}
 
-func newAcceptPacketFromData(packetData []byte, connOption *ConnectionOption) *AcceptPacket {
+func NewAcceptPacketFromData(packetData []byte, connOption *ConnectionOption) *AcceptPacket {
 	if len(packetData) < 32 {
 		return nil
 	}

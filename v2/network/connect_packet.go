@@ -2,15 +2,15 @@ package network
 
 import "encoding/binary"
 
-//type ConnectPacket Packet
+// type ConnectPacket Packet
 type ConnectPacket struct {
 	packet     Packet
 	sessionCtx SessionContext
 	buffer     []byte
 }
 
-func (pck *ConnectPacket) bytes() []byte {
-	output := pck.packet.bytes()
+func (pck *ConnectPacket) Bytes() []byte {
+	output := pck.packet.Bytes()
 	//binary.BigEndian.PutUint16(output, pck.length)
 	//output[4] = uint8(pck.packetType)
 	//output[5] = pck.flag
@@ -43,7 +43,7 @@ func (pck *ConnectPacket) bytes() []byte {
 	return output
 
 }
-func (pck *ConnectPacket) getPacketType() PacketType {
+func (pck *ConnectPacket) GetPacketType() PacketType {
 	return pck.packet.packetType
 }
 func newConnectPacket(sessionCtx SessionContext) *ConnectPacket {

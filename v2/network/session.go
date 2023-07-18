@@ -624,7 +624,7 @@ func (session *Session) read(numBytes int) ([]byte, error) {
 func (session *Session) writePacket(pck PacketInterface) error {
 	session.sendPcks = append(session.sendPcks, pck)
 	tracer := session.Context.ConnOption.Tracer
-	tmp := pck.bytes()
+	tmp := pck.Bytes()
 	tracer.LogPacket("Write packet:", tmp)
 	var err = session.initWrite()
 	if err != nil {
@@ -719,15 +719,15 @@ func (session *Session) readPacket() (PacketInterface, error) {
 					session.negotiate()
 				}
 				for _, pck := range session.sendPcks {
-					//log.Printf("Request: %#v\n\n", pck.bytes())
+					//log.Printf("Request: %#v\n\n", pck.Bytes())
 					err := session.initWrite()
 					if err != nil {
 						return nil, err
 					}
 					if session.Context.ConnOption.SSL {
-						_, err = session.sslConn.Write(pck.bytes())
+						_, err = session.sslConn.Write(pck.Bytes())
 					} else {
-						_, err = session.conn.Write(pck.bytes())
+						_, err = session.conn.Write(pck.Bytes())
 					}
 					if err != nil {
 						return nil, err
@@ -752,7 +752,7 @@ func (session *Session) readPacket() (PacketInterface, error) {
 	//log.Printf("Response: %#v\n\n", packetData)
 	switch pckType {
 	case ACCEPT:
-		return newAcceptPacketFromData(packetData, session.Context.ConnOption), nil
+		return NewAcceptPacketFromData(packetData, session.Context.ConnOption), nil
 	case REFUSE:
 		return newRefusePacketFromData(packetData), nil
 	case REDIRECT:

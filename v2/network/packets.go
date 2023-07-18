@@ -5,8 +5,8 @@ import "encoding/binary"
 type PacketType uint8
 
 type PacketInterface interface {
-	bytes() []byte
-	getPacketType() PacketType
+	Bytes() []byte
+	GetPacketType() PacketType
 }
 
 const (
@@ -53,7 +53,7 @@ func newPacket(packetData []byte) *Packet {
 	}
 }
 
-func (pck *Packet) bytes() []byte {
+func (pck *Packet) Bytes() []byte {
 	output := make([]byte, 8)
 	if pck.dataOffset > 8 {
 		output = append(output, make([]byte, pck.dataOffset-8)...)
@@ -63,6 +63,6 @@ func (pck *Packet) bytes() []byte {
 	output[5] = pck.flag
 	return output
 }
-func (pck *Packet) getPacketType() PacketType {
+func (pck *Packet) GetPacketType() PacketType {
 	return pck.packetType
 }

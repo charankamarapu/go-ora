@@ -13,7 +13,7 @@ type DataPacket struct {
 	buffer     []byte
 }
 
-func (pck *DataPacket) bytes() []byte {
+func (pck *DataPacket) Bytes() []byte {
 	output := bytes.Buffer{}
 	temp := make([]byte, 0xA)
 	if pck.sessionCtx.handshakeComplete && pck.sessionCtx.Version >= 315 {

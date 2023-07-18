@@ -10,8 +10,8 @@ type RedirectPacket struct {
 	reconnectData string
 }
 
-func (pck *RedirectPacket) bytes() []byte {
-	output := pck.packet.bytes()
+func (pck *RedirectPacket) Bytes() []byte {
+	output := pck.packet.Bytes()
 	data := append([]byte(pck.redirectAddr), 0)
 	data = append(data, []byte(pck.reconnectData)...)
 	binary.BigEndian.PutUint16(output[8:], uint16(len(data)))
@@ -19,7 +19,7 @@ func (pck *RedirectPacket) bytes() []byte {
 	return output
 }
 
-func (pck *RedirectPacket) getPacketType() PacketType {
+func (pck *RedirectPacket) GetPacketType() PacketType {
 	return pck.packet.packetType
 }
 

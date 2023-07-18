@@ -12,7 +12,7 @@ type MarkerPacket struct {
 	markerType uint8
 }
 
-func (pck *MarkerPacket) bytes() []byte {
+func (pck *MarkerPacket) Bytes() []byte {
 	if pck.sessionCtx.handshakeComplete && pck.sessionCtx.Version >= 315 {
 		return []byte{0, 0x0, 0, 0xB, 0xC, 0, 0, 0, pck.markerType, 0, pck.markerData}
 	} else {
@@ -20,7 +20,7 @@ func (pck *MarkerPacket) bytes() []byte {
 	}
 }
 
-func (pck *MarkerPacket) getPacketType() PacketType {
+func (pck *MarkerPacket) GetPacketType() PacketType {
 	return pck.packet.packetType
 }
 
