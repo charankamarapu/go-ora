@@ -11,7 +11,7 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
-	"github.com/sijms/go-ora/network"
+	"github.com/charankamarapu/go-ora/network"
 	"strconv"
 	"strings"
 	"time"

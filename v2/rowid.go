@@ -1,7 +1,7 @@
 package go_ora
 
 import (
-	"github.com/sijms/go-ora/v2/network"
+	"github.com/charankamarapu/go-ora/v2/network"
 )
 
 type rowid struct {

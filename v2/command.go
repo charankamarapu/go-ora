@@ -8,7 +8,7 @@ import (
 	"encoding/binary"
 	"errors"
 	"fmt"
-	"github.com/sijms/go-ora/v2/network"
+	"github.com/charankamarapu/go-ora/v2/network"
 	"reflect"
 	"regexp"
 	"strings"

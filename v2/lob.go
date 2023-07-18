@@ -3,7 +3,7 @@ package go_ora
 import (
 	"bytes"
 	"errors"
-	"github.com/sijms/go-ora/v2/converters"
+	"github.com/charankamarapu/go-ora/v2/converters"
 	"go/types"
 )
 

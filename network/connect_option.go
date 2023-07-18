@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/sijms/go-ora/trace"
+	"github.com/charankamarapu/go-ora/trace"
 )
 
 type ServerAddr struct {

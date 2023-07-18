@@ -1,6 +1,6 @@
 package network
 
-import "github.com/sijms/go-ora/network/security"
+import "github.com/charankamarapu/go-ora/network/security"
 
 type SessionContext struct {
 	//conn net.Conn

@@ -7,8 +7,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/sijms/go-ora/converters"
-	"github.com/sijms/go-ora/network"
+	"github.com/charankamarapu/go-ora/converters"
+	"github.com/charankamarapu/go-ora/network"
 	"regexp"
 	"strings"
 )

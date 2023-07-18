@@ -3,9 +3,9 @@ package go_ora
 import (
 	"errors"
 	"fmt"
-	"github.com/sijms/go-ora/v2/advanced_nego"
-	"github.com/sijms/go-ora/v2/network"
-	"github.com/sijms/go-ora/v2/trace"
+	"github.com/charankamarapu/go-ora/v2/advanced_nego"
+	"github.com/charankamarapu/go-ora/v2/network"
+	"github.com/charankamarapu/go-ora/v2/trace"
 	"io/ioutil"
 	"net"
 	"net/url"
