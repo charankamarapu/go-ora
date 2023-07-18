@@ -20,7 +20,7 @@ func (pck *RedirectPacket) Bytes() []byte {
 }
 
 func (pck *RedirectPacket) GetPacketType() PacketType {
-	return pck.packet.packetType
+	return pck.packet.PacketType
 }
 
 func newRedirectPacketFromData(packetData []byte) *RedirectPacket {
@@ -29,10 +29,10 @@ func newRedirectPacketFromData(packetData []byte) *RedirectPacket {
 	}
 	pck := RedirectPacket{
 		packet: Packet{
-			dataOffset: 10,
-			length:     uint32(binary.BigEndian.Uint16(packetData)),
-			packetType: PacketType(packetData[4]),
-			flag:       packetData[5],
+			DataOffset: 10,
+			Length:     uint32(binary.BigEndian.Uint16(packetData)),
+			PacketType: PacketType(packetData[4]),
+			Flag:       packetData[5],
 		},
 	}
 	//data := string(packetData[10 : 10+dataLen])

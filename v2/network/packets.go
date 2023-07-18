@@ -27,10 +27,10 @@ const (
 
 type Packet struct {
 	//sessionCtx SessionContext
-	dataOffset uint16
-	length     uint32
-	packetType PacketType
-	flag       uint8
+	DataOffset uint16
+	Length     uint32
+	PacketType PacketType
+	Flag       uint8
 	//NSPFSID    int
 	//buffer     []byte
 	//SID        []byte
@@ -47,22 +47,22 @@ type Packet struct {
 
 func newPacket(packetData []byte) *Packet {
 	return &Packet{
-		length:     uint32(binary.BigEndian.Uint16(packetData)),
-		packetType: PacketType(packetData[4]),
-		flag:       packetData[5],
+		Length:     uint32(binary.BigEndian.Uint16(packetData)),
+		PacketType: PacketType(packetData[4]),
+		Flag:       packetData[5],
 	}
 }
 
 func (pck *Packet) Bytes() []byte {
 	output := make([]byte, 8)
-	if pck.dataOffset > 8 {
-		output = append(output, make([]byte, pck.dataOffset-8)...)
+	if pck.DataOffset > 8 {
+		output = append(output, make([]byte, pck.DataOffset-8)...)
 	}
-	binary.BigEndian.PutUint16(output, uint16(pck.length))
-	output[4] = uint8(pck.packetType)
-	output[5] = pck.flag
+	binary.BigEndian.PutUint16(output, uint16(pck.Length))
+	output[4] = uint8(pck.PacketType)
+	output[5] = pck.Flag
 	return output
 }
 func (pck *Packet) GetPacketType() PacketType {
-	return pck.packetType
+	return pck.PacketType
 }

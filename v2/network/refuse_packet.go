@@ -30,7 +30,7 @@ func (pck *RefusePacket) Bytes() []byte {
 }
 
 func (pck *RefusePacket) GetPacketType() PacketType {
-	return pck.packet.packetType
+	return pck.packet.PacketType
 }
 func newRefusePacketFromData(packetData []byte) *RefusePacket {
 	if len(packetData) < 12 {
@@ -44,10 +44,10 @@ func newRefusePacketFromData(packetData []byte) *RefusePacket {
 
 	return &RefusePacket{
 		packet: Packet{
-			dataOffset: 12,
-			length:     uint32(binary.BigEndian.Uint16(packetData)),
-			packetType: PacketType(packetData[4]),
-			flag:       0,
+			DataOffset: 12,
+			Length:     uint32(binary.BigEndian.Uint16(packetData)),
+			PacketType: PacketType(packetData[4]),
+			Flag:       0,
 		},
 		SystemReason: packetData[9],
 		UserReason:   packetData[8],

@@ -17,12 +17,12 @@ func (pck *DataPacket) Bytes() []byte {
 	output := bytes.Buffer{}
 	temp := make([]byte, 0xA)
 	if pck.sessionCtx.handshakeComplete && pck.sessionCtx.Version >= 315 {
-		binary.BigEndian.PutUint32(temp, pck.length)
+		binary.BigEndian.PutUint32(temp, pck.Length)
 	} else {
-		binary.BigEndian.PutUint16(temp, uint16(pck.length))
+		binary.BigEndian.PutUint16(temp, uint16(pck.Length))
 	}
-	temp[4] = uint8(pck.packetType)
-	temp[5] = pck.flag
+	temp[4] = uint8(pck.PacketType)
+	temp[5] = pck.Flag
 	binary.BigEndian.PutUint16(temp[8:], pck.dataFlag)
 	output.Write(temp)
 	if len(pck.buffer) > 0 {
@@ -53,10 +53,10 @@ func newDataPacket(initialData []byte, sessionCtx *SessionContext) (*DataPacket,
 
 	return &DataPacket{
 		Packet: Packet{
-			dataOffset: 0xA,
-			length:     uint32(len(initialData)) + 0xA,
-			packetType: DATA,
-			flag:       0,
+			DataOffset: 0xA,
+			Length:     uint32(len(initialData)) + 0xA,
+			PacketType: DATA,
+			Flag:       0,
 		},
 		sessionCtx: sessionCtx,
 		dataFlag:   0,
@@ -70,19 +70,19 @@ func newDataPacketFromData(packetData []byte, sessionCtx *SessionContext) (*Data
 	}
 	pck := &DataPacket{
 		Packet: Packet{
-			dataOffset: 0xA,
+			DataOffset: 0xA,
 			//length:     binary.BigEndian.Uint16(packetData),
-			packetType: PacketType(packetData[4]),
-			flag:       packetData[5],
+			PacketType: PacketType(packetData[4]),
+			Flag:       packetData[5],
 		},
 		sessionCtx: sessionCtx,
 		dataFlag:   binary.BigEndian.Uint16(packetData[8:]),
 		buffer:     packetData[10:],
 	}
 	if sessionCtx.handshakeComplete && sessionCtx.Version >= 315 {
-		pck.length = binary.BigEndian.Uint32(packetData)
+		pck.Length = binary.BigEndian.Uint32(packetData)
 	} else {
-		pck.length = uint32(binary.BigEndian.Uint16(packetData))
+		pck.Length = uint32(binary.BigEndian.Uint16(packetData))
 	}
 	var err error
 	if sessionCtx.AdvancedService.CryptAlgo != nil || sessionCtx.AdvancedService.HashAlgo != nil {

@@ -21,16 +21,16 @@ func (pck *MarkerPacket) Bytes() []byte {
 }
 
 func (pck *MarkerPacket) GetPacketType() PacketType {
-	return pck.packet.packetType
+	return pck.packet.PacketType
 }
 
 func newMarkerPacket(markerData uint8, sessionCtx *SessionContext) *MarkerPacket {
 	return &MarkerPacket{
 		packet: Packet{
-			dataOffset: 0,
-			length:     0xB,
-			packetType: MARKER,
-			flag:       0x20,
+			DataOffset: 0,
+			Length:     0xB,
+			PacketType: MARKER,
+			Flag:       0x20,
 		},
 		sessionCtx: sessionCtx,
 		markerType: 1,
@@ -43,20 +43,20 @@ func newMarkerPacketFromData(packetData []byte, sessionCtx *SessionContext) *Mar
 	}
 	pck := MarkerPacket{
 		packet: Packet{
-			dataOffset: 0,
-			packetType: PacketType(packetData[4]),
-			flag:       packetData[5],
+			DataOffset: 0,
+			PacketType: PacketType(packetData[4]),
+			Flag:       packetData[5],
 		},
 		sessionCtx: sessionCtx,
 		markerType: packetData[8],
 		markerData: packetData[10],
 	}
 	if sessionCtx.handshakeComplete && sessionCtx.Version >= 315 {
-		pck.packet.length = binary.BigEndian.Uint32(packetData)
+		pck.packet.Length = binary.BigEndian.Uint32(packetData)
 	} else {
-		pck.packet.length = uint32(binary.BigEndian.Uint16(packetData))
+		pck.packet.Length = uint32(binary.BigEndian.Uint16(packetData))
 	}
-	if pck.packet.packetType != MARKER {
+	if pck.packet.PacketType != MARKER {
 		return nil
 	}
 	return &pck

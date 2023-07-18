@@ -34,7 +34,7 @@ func (pck *ConnectPacket) Bytes() []byte {
 	output[19] = 152
 	binary.BigEndian.PutUint16(output[22:], pck.sessionCtx.OurOne)
 	binary.BigEndian.PutUint16(output[24:], uint16(len(pck.buffer)))
-	binary.BigEndian.PutUint16(output[26:], pck.packet.dataOffset)
+	binary.BigEndian.PutUint16(output[26:], pck.packet.DataOffset)
 	output[32] = pck.sessionCtx.ACFL0
 	output[33] = pck.sessionCtx.ACFL1
 	if len(pck.buffer) <= 230 {
@@ -44,7 +44,7 @@ func (pck *ConnectPacket) Bytes() []byte {
 
 }
 func (pck *ConnectPacket) GetPacketType() PacketType {
-	return pck.packet.packetType
+	return pck.packet.PacketType
 }
 func newConnectPacket(sessionCtx SessionContext) *ConnectPacket {
 	connectData := sessionCtx.ConnOption.ConnectionData()
@@ -63,10 +63,10 @@ func newConnectPacket(sessionCtx SessionContext) *ConnectPacket {
 	return &ConnectPacket{
 		sessionCtx: sessionCtx,
 		packet: Packet{
-			dataOffset: 70,
-			length:     length,
-			packetType: CONNECT,
-			flag:       0,
+			DataOffset: 70,
+			Length:     length,
+			PacketType: CONNECT,
+			Flag:       0,
 		},
 		buffer: []byte(connectData),
 	}

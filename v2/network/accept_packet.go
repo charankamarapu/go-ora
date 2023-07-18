@@ -7,9 +7,9 @@ import (
 
 // type AcceptPacket Packet
 type AcceptPacket struct {
-	packet     Packet
-	sessionCtx SessionContext
-	buffer     []byte
+	Packet     Packet
+	SessionCtx SessionContext
+	Buffer     []byte
 }
 
 func (pck *AcceptPacket) Bytes() []byte {
@@ -17,32 +17,32 @@ func (pck *AcceptPacket) Bytes() []byte {
 	// if pck.sessionCtx.Version < 315 {
 	// 	ptkSize = 32
 	// }
-	output := pck.packet.Bytes()
+	output := pck.Packet.Bytes()
 	//output := make([]byte, pck.dataOffset)
 	//binary.BigEndian.PutUint16(output[0:], pck.packet.length)
 	//output[4] = uint8(pck.packet.packetType)
 	//output[5] = pck.packet.flag
-	binary.BigEndian.PutUint16(output[8:], pck.sessionCtx.Version)
-	binary.BigEndian.PutUint16(output[10:], pck.sessionCtx.Options)
-	if pck.sessionCtx.Version < 315 {
-		binary.BigEndian.PutUint16(output[12:], uint16(pck.sessionCtx.SessionDataUnit))
-		binary.BigEndian.PutUint16(output[14:], uint16(pck.sessionCtx.TransportDataUnit))
+	binary.BigEndian.PutUint16(output[8:], pck.SessionCtx.Version)
+	binary.BigEndian.PutUint16(output[10:], pck.SessionCtx.Options)
+	if pck.SessionCtx.Version < 315 {
+		binary.BigEndian.PutUint16(output[12:], uint16(pck.SessionCtx.SessionDataUnit))
+		binary.BigEndian.PutUint16(output[14:], uint16(pck.SessionCtx.TransportDataUnit))
 	} else {
-		binary.BigEndian.PutUint32(output[32:], pck.sessionCtx.SessionDataUnit)
-		binary.BigEndian.PutUint32(output[36:], pck.sessionCtx.TransportDataUnit)
+		binary.BigEndian.PutUint32(output[32:], pck.SessionCtx.SessionDataUnit)
+		binary.BigEndian.PutUint32(output[36:], pck.SessionCtx.TransportDataUnit)
 	}
 
-	binary.BigEndian.PutUint16(output[16:], pck.sessionCtx.Histone)
-	binary.BigEndian.PutUint16(output[18:], uint16(len(pck.buffer)))
-	binary.BigEndian.PutUint16(output[20:], pck.packet.dataOffset)
-	output[22] = pck.sessionCtx.ACFL0
-	output[23] = pck.sessionCtx.ACFL1
+	binary.BigEndian.PutUint16(output[16:], pck.SessionCtx.Histone)
+	binary.BigEndian.PutUint16(output[18:], uint16(len(pck.Buffer)))
+	binary.BigEndian.PutUint16(output[20:], pck.Packet.DataOffset)
+	output[22] = pck.SessionCtx.ACFL0
+	output[23] = pck.SessionCtx.ACFL1
 	// s
-	output = append(output, pck.buffer...)
+	output = append(output, pck.Buffer...)
 	return output
 }
 func (pck *AcceptPacket) GetPacketType() PacketType {
-	return pck.packet.packetType
+	return pck.Packet.PacketType
 }
 
 //func NewAcceptPacket(sessionCtx SessionContext, acceptData []byte) *AcceptPacket {
@@ -76,13 +76,13 @@ func NewAcceptPacketFromData(packetData []byte, connOption *ConnectionOption) *A
 		reconAdd = string(packetData[reconAddStart:(reconAddStart + reconAddLen)])
 	}
 	pck := AcceptPacket{
-		packet: Packet{
-			dataOffset: binary.BigEndian.Uint16(packetData[20:]),
-			length:     uint32(binary.BigEndian.Uint16(packetData)),
-			packetType: PacketType(packetData[4]),
-			flag:       packetData[5],
+		Packet: Packet{
+			DataOffset: binary.BigEndian.Uint16(packetData[20:]),
+			Length:     uint32(binary.BigEndian.Uint16(packetData)),
+			PacketType: PacketType(packetData[4]),
+			Flag:       packetData[5],
 		},
-		sessionCtx: SessionContext{
+		SessionCtx: SessionContext{
 			ConnOption:          connOption,
 			SID:                 nil,
 			Version:             binary.BigEndian.Uint16(packetData[8:]),
@@ -102,20 +102,20 @@ func NewAcceptPacketFromData(packetData []byte, connOption *ConnectionOption) *A
 			GotReset:            false,
 		},
 	}
-	pck.buffer = packetData[int(pck.packet.dataOffset):]
-	if pck.sessionCtx.Version >= 315 {
-		pck.sessionCtx.SessionDataUnit = binary.BigEndian.Uint32(packetData[32:])
-		pck.sessionCtx.TransportDataUnit = binary.BigEndian.Uint32(packetData[36:])
+	pck.Buffer = packetData[int(pck.Packet.DataOffset):]
+	if pck.SessionCtx.Version >= 315 {
+		pck.SessionCtx.SessionDataUnit = binary.BigEndian.Uint32(packetData[32:])
+		pck.SessionCtx.TransportDataUnit = binary.BigEndian.Uint32(packetData[36:])
 	}
-	if (pck.packet.flag & 1) > 0 {
+	if (pck.Packet.Flag & 1) > 0 {
 		fmt.Println("contain SID data")
-		pck.packet.length -= 16
-		pck.sessionCtx.SID = packetData[int(pck.packet.length):]
+		pck.Packet.Length -= 16
+		pck.SessionCtx.SID = packetData[int(pck.Packet.Length):]
 	}
-	if pck.sessionCtx.TransportDataUnit < pck.sessionCtx.SessionDataUnit {
-		pck.sessionCtx.SessionDataUnit = pck.sessionCtx.TransportDataUnit
+	if pck.SessionCtx.TransportDataUnit < pck.SessionCtx.SessionDataUnit {
+		pck.SessionCtx.SessionDataUnit = pck.SessionCtx.TransportDataUnit
 	}
-	if binary.BigEndian.Uint16(packetData[18:]) != uint16(len(pck.buffer)) {
+	if binary.BigEndian.Uint16(packetData[18:]) != uint16(len(pck.Buffer)) {
 		return nil
 	}
 	return &pck

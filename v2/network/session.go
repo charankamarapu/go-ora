@@ -447,7 +447,7 @@ func (session *Session) Connect(ctx context.Context) error {
 	if err != nil {
 		return err
 	}
-	if uint16(connectPacket.packet.length) == connectPacket.packet.dataOffset {
+	if uint16(connectPacket.packet.Length) == connectPacket.packet.DataOffset {
 		session.PutBytes(connectPacket.buffer...)
 		err = session.Write()
 		if err != nil {
@@ -460,7 +460,7 @@ func (session *Session) Connect(ctx context.Context) error {
 	}
 
 	if acceptPacket, ok := pck.(*AcceptPacket); ok {
-		*session.Context = acceptPacket.sessionCtx
+		*session.Context = acceptPacket.SessionCtx
 		session.Context.handshakeComplete = true
 		connOption.Tracer.Print("Handshake Complete")
 		return nil
@@ -759,7 +759,7 @@ func (session *Session) readPacket() (PacketInterface, error) {
 		pck := newRedirectPacketFromData(packetData)
 		dataLen := binary.BigEndian.Uint16(packetData[8:])
 		var data string
-		if uint16(pck.packet.length) <= pck.packet.dataOffset {
+		if uint16(pck.packet.Length) <= pck.packet.DataOffset {
 			packetData, err = readPacketData()
 			dataPck, err := newDataPacketFromData(packetData, session.Context)
 			if err != nil {
@@ -771,7 +771,7 @@ func (session *Session) readPacket() (PacketInterface, error) {
 		}
 		//fmt.Println("data returned: ", data)
 		length := strings.Index(data, "\x00")
-		if pck.packet.flag&2 != 0 && length > 0 {
+		if pck.packet.Flag&2 != 0 && length > 0 {
 			pck.redirectAddr = data[:length]
 			pck.reconnectData = data[length:]
 		} else {
